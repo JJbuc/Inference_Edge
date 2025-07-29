@@ -1,0 +1,9 @@
+model_name: "Qwen/Qwen2.5-Coder-0.5B-Instruct"
+quantization: "4bit"
+device: "cuda"
+default_params:
+  max_length: 1000
+  temperature: 1.0
+  top_k: 50
+  top_p: 0.9
+  num_beams: 3
