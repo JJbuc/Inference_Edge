@@ -1,6 +1,7 @@
 model_name: "Qwen/Qwen2.5-Coder-0.5B-Instruct"
 quantization: "4bit"
 device: "cuda"
+strategy: "auto"
 default_params:
   max_length: 1000
   temperature: 1.0

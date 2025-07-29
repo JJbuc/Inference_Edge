@@ -10,7 +10,7 @@ import os
 def load_config(config_path):
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
-    
+      
 class LLM_Handler():
     def __init__(self, config):
         self.model_name = config.get('model_name')
