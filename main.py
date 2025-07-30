@@ -2,10 +2,8 @@ import yaml
 # from fastapi import FastAPI, Request
 from inference_techniques.greedy import GreedyDecoder
 from inference_techniques.beam_search import BeamSearchDecoder
-# from inference_techniques.top_k import TopKDecoder
-# from inference_techniques.top_p import TopPDecoder
-# from inference_techniques.temperature import TemperatureDecoder
 from llm_handler import LLM_Handler
+from clear_space import clear_space
 
 # Load config
 def load_config(config_path="config/config.yaml"):
@@ -20,7 +18,9 @@ from inference_techniques.top_p import TopPDecoder
 from inference_techniques.contrastive_decoding import ContrastiveDecoder
 
 def get_decoder(strategy, config):
-    if strategy == "beam_search":
+    if strategy == "contrastive":
+        return ContrastiveDecoder(config)
+    elif strategy == "beam_search":
         return BeamSearchDecoder(config)
     elif strategy == "greedy":
         return GreedyDecoder(config)
@@ -30,16 +30,14 @@ def get_decoder(strategy, config):
         return TopPDecoder(config)
     elif strategy == "auto":
         return GreedyDecoder(config)
-    elif strategy == "contrastive":
-        return ContrastiveDecoder(config)
     else:
         raise ValueError(f"Unknown strategy: {strategy}")
 
-
 def main():
     config = load_config()
-    llm_handler = LLM_Handler(config)
+    # llm_handler = LLM_Handler(config)  # Amateur model
     strategy = config.get("strategy", "auto")
+    print("Calling the decoder now")
     decoder = get_decoder(strategy, config)
     max_length = config.get("default_params", {}).get("max_length", 1000)
 
@@ -48,11 +46,12 @@ def main():
     if decoder:
         output = decoder.generate(prompt, max_length=max_length)
     else:
+        llm_handler = LLM_Handler(config)
         output = llm_handler.standard_inference(prompt, max_length=max_length)
 
     print("\nModel Output:\n", output)
 
-    llm_handler.clear_space()
+    clear_space()
 
 if __name__ == "__main__":
     main()
