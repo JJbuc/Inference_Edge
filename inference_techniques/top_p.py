@@ -10,7 +10,6 @@ class TopPDecoder(LLM_Handler):
             temperature = self.default_params.get("temperature", 1.0)
         params = self.default_params.copy()
         params.update(override_params)
-        print(f"\nTop-p decoding for prompt: '{prompt}' with top_p={top_p}, temperature={temperature}, max_length={max_length}")
         outputs = self.pipe(
             prompt,
             max_new_tokens=max_length,
@@ -18,4 +17,5 @@ class TopPDecoder(LLM_Handler):
             temperature=temperature,
             do_sample=True
         )
-        return outputs[0]['generated_text']
+        generated_text = outputs[0]['generated_text']
+        print(generated_text)

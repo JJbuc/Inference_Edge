@@ -30,23 +30,6 @@ class ContrastiveDecoder:
         device = next(self.amateur_handler.model.parameters()).device
         input_ids = self.amateur_handler.tokenizer(prompt, return_tensors="pt").input_ids.to(device)
         generated_ids = input_ids.tolist()[0]
-        # for _ in range(max_length):
-        #     ids_tensor = torch.tensor([generated_ids], device=device)
-        #     ama_log_probs = self.get_log_probs(self.amateur_handler, ids_tensor)
-        #     exp_device = next(self.expert_handler.model.parameters()).device
-        #     ids_tensor_exp = torch.tensor([generated_ids], device=exp_device)
-        #     exp_log_probs = self.get_log_probs(self.expert_handler, ids_tensor_exp)
-
-        #     # Get top-k candidate tokens from expert
-        #     topk_indices = np.argpartition(exp_log_probs[0], -top_k)[-top_k:]
-        #     # Compute contrastive scores only for top-k candidates
-        #     contrastive_scores = exp_log_probs[0][topk_indices] / (ama_log_probs[0][topk_indices] + 1e-9)
-        #     contrastive_scores = contrastive_scores * self.head_parameter
-        #     # Select the best candidate
-        #     next_token_id = int(topk_indices[np.argmax(contrastive_scores)])
-        #     generated_ids.append(next_token_id)
-        #     if next_token_id == self.amateur_handler.tokenizer.eos_token_id:
-        #         break
         for _ in range(max_length):
             ids_tensor = torch.tensor([generated_ids], device=device)
             ama_log_probs = self.get_log_probs(self.amateur_handler, ids_tensor)
@@ -68,5 +51,5 @@ class ContrastiveDecoder:
 
             if next_token_id == self.amateur_handler.tokenizer.eos_token_id:
                 break
-        output = self.amateur_handler.tokenizer.decode(generated_ids, skip_special_tokens=True)
-        return output
+        # output = self.amateur_handler.tokenizer.decode(generated_ids, skip_special_tokens=True)
+        # return output

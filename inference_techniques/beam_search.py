@@ -9,14 +9,11 @@ class BeamSearchDecoder(LLM_Handler):
             num_beams = self.default_params.get("num_beams", 3)
         params = self.default_params.copy()
         params.update(override_params)
-        print(f"\nBeam search for prompt: '{prompt}' with num_beams={num_beams}, max_length={max_length}")
-        start_inference_time = time.time()
         outputs = self.pipe(
             prompt,
             max_new_tokens=max_length,
             num_beams=num_beams,
             do_sample=False
         )
-        end_inference_time = time.time()
-        print(f"Beam search inference completed in {end_inference_time - start_inference_time:.2f} seconds.")
-        return outputs[0]['generated_text']
+        generated_text = outputs[0]['generated_text']
+        print(generated_text)

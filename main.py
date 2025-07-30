@@ -35,21 +35,19 @@ def get_decoder(strategy, config):
 
 def main():
     config = load_config()
-    # llm_handler = LLM_Handler(config)  # Amateur model
     strategy = config.get("strategy", "auto")
-    print("Calling the decoder now")
     decoder = get_decoder(strategy, config)
     max_length = config.get("default_params", {}).get("max_length", 1000)
 
     prompt = input("Enter your prompt: ")
 
     if decoder:
-        output = decoder.generate(prompt, max_length=max_length)
+        decoder.generate(prompt, max_length=max_length)
     else:
         llm_handler = LLM_Handler(config)
-        output = llm_handler.standard_inference(prompt, max_length=max_length)
+        llm_handler.standard_inference(prompt, max_length=max_length)
 
-    print("\nModel Output:\n", output)
+    # print("\nModel Output:\n", output)
 
     clear_space()
 

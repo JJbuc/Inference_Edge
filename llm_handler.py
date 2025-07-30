@@ -82,31 +82,9 @@ class LLM_Handler():
         end_inference_time = time.time()
         print(f"Inference completed in {end_inference_time - start_inference_time:.2f} seconds.")
 
-        return outputs[0]['generated_text']
+        generated_text = outputs[0]['generated_text']
+        print(generated_text)
     
-    # def clear_space(self):
-    #     print("\nAttempting to clear GPU VRAM...")
-        
-    #     # Delete model, tokenizer, and pipeline objects
-    #     if hasattr(self, 'pipe') and self.pipe is not None:
-    #         del self.pipe
-    #         self.pipe = None
-    #     if hasattr(self, 'model') and self.model is not None:
-    #         del self.model
-    #         self.model = None
-    #     if hasattr(self, 'tokenizer') and self.tokenizer is not None:
-    #         del self.tokenizer
-    #         self.tokenizer = None
-        
-    #     # Explicitly clear PyTorch CUDA cache
-    #     if torch.cuda.is_available():
-    #         torch.cuda.empty_cache()
-    #         print("PyTorch CUDA cache emptied.")
-    #     else:
-    #         print("No CUDA device found, no cache to empty.")
-            
-    #     print("GPU VRAM clear attempt complete, model {0} removed. Objects set to None.".format(self.model_name))
-
 # --- Main function to run the example ---
 if __name__ == "__main__":
     config_path = os.path.join("config", "config.yaml")

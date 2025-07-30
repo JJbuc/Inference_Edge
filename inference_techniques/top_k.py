@@ -8,11 +8,11 @@ class TopKDecoder(LLM_Handler):
             top_k = self.default_params.get("top_k", 50)
         params = self.default_params.copy()
         params.update(override_params)
-        print(f"\nTop-k decoding for prompt: '{prompt}' with top_k={top_k}, max_length={max_length}")
         outputs = self.pipe(
             prompt,
             max_new_tokens=max_length,
             top_k=top_k,
             do_sample=True
         )
-        return outputs[0]['generated_text']
+        generated_text = outputs[0]['generated_text']
+        print(generated_text)

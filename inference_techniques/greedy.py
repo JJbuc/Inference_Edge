@@ -6,9 +6,9 @@ class GreedyDecoder(LLM_Handler):
             max_length = self.default_params.get("max_length", 1000)
         params = self.default_params.copy()
         params.update(override_params)
-        print(f"\nGreedy decoding for prompt: '{prompt}' with max_length={max_length}")
         outputs = self.pipe(
             prompt,
             max_new_tokens=max_length
         )
-        return outputs[0]['generated_text']
+        generated_text = outputs[0]['generated_text']
+        print(generated_text)
