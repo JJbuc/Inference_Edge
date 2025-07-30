@@ -17,6 +17,7 @@ from inference_techniques.beam_search import BeamSearchDecoder
 from inference_techniques.greedy import GreedyDecoder
 from inference_techniques.top_k import TopKDecoder  
 from inference_techniques.top_p import TopPDecoder
+from inference_techniques.contrastive_decoding import ContrastiveDecoder
 
 def get_decoder(strategy, config):
     if strategy == "beam_search":
@@ -28,7 +29,9 @@ def get_decoder(strategy, config):
     elif strategy == "top_p":
         return TopPDecoder(config)
     elif strategy == "auto":
-        return LLM_Handler(config)
+        return GreedyDecoder(config)
+    elif strategy == "contrastive":
+        return ContrastiveDecoder(config)
     else:
         raise ValueError(f"Unknown strategy: {strategy}")
 

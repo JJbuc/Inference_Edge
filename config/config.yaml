@@ -1,7 +1,10 @@
-model_name: "Qwen/Qwen2.5-Coder-0.5B-Instruct"
+# model_name: "Qwen/Qwen2.5-Coder-0.5B-Instruct"
+model_ama: "Qwen/Qwen2.5-Coder-0.5B-Instruct"
+model_exp: "Qwen/Qwen2.5-3B-Instruct"
 quantization: "4bit"
 device: "cuda"
-strategy: "top_p"
+strategy: "contrastive"
+head_parameter: 1.0
 default_params:
   max_length: 1000
   temperature: 1.0
