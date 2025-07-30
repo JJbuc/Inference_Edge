@@ -67,7 +67,7 @@ class LLM_Handler():
         )
         
         end_load_time = time.time()
-        print(f'Model "{self.model_name}" initialized and loaded to {self.device_map[""]} in {end_load_time - start_load_time:.2f} seconds.')
+        print(f'Model "{self.model_name}" initialized and loaded in {end_load_time - start_load_time:.2f} seconds.')
 
     def standard_inference(self, prompt: str, **override_params) -> str:
         params = self.default_params.copy()
