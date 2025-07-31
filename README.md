@@ -180,9 +180,6 @@ Output will be streamed or printed based on your config.
 | Qwen2-7B   | 7B     | RTX 4050      | Beam (k=4)      | 1          | 16         | 6.5               | 0.72                    |
 | Qwen2-7B   | 7B     | RTX 4050      | Top-k (k=40)    | 1          | 17         | 6.1               | 0.65                    |
 | Qwen2-7B   | 7B     | RTX 4050      | Contrastive     | 1          | 14         | 6.8               | 0.75                    |
-```
-
-Let me know if you want me to help with other formatting or integration!
 
 ## License
 
