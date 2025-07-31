@@ -4,6 +4,7 @@ class TopKDecoder(LLM_Handler):
     def generate(self, prompt, max_length=None, top_k=None, **override_params):
         if max_length is None:
             max_length = self.default_params.get("max_length", 1000)
+        temperature = self.default_params.get("temperature", 1.0)   
         if top_k is None:
             top_k = self.default_params.get("top_k", 50)
         params = self.default_params.copy()
@@ -12,7 +13,8 @@ class TopKDecoder(LLM_Handler):
             prompt,
             max_new_tokens=max_length,
             top_k=top_k,
-            do_sample=True
+            do_sample=True,
+            temperature=temperature
         )
         generated_text = outputs[0]['generated_text']
         print(generated_text)

@@ -7,13 +7,15 @@ class BeamSearchDecoder(LLM_Handler):
             max_length = self.default_params.get("max_length", 1000)
         if num_beams is None:
             num_beams = self.default_params.get("num_beams", 3)
+        temperature = self.default_params.get("temperature", 1.0)
         params = self.default_params.copy()
         params.update(override_params)
         outputs = self.pipe(
             prompt,
             max_new_tokens=max_length,
             num_beams=num_beams,
-            do_sample=False
+            do_sample=False,
+            temperature=temperature
         )
         generated_text = outputs[0]['generated_text']
         print(generated_text)

@@ -16,11 +16,11 @@ class ContrastiveDecoder:
 
         self.head_parameter = config.get("head_parameter", 1.0)
         self.default_params = config.get("default_params", {})
-
-    def get_log_probs(self, handler, input_ids):
+        self.temperature = self.default_params.get("temperature", 1.0)
+    def get_log_probs(self, handler, input_ids, temperature):
         with torch.no_grad():
             outputs = handler.model(input_ids)
-            logits = outputs.logits[:, -1, :]
+            logits = outputs.logits[:, -1, :]/ temperature 
             log_probs = torch.nn.functional.log_softmax(logits, dim=-1)
         return log_probs.cpu().numpy()
 
@@ -32,10 +32,10 @@ class ContrastiveDecoder:
         generated_ids = input_ids.tolist()[0]
         for _ in range(max_length):
             ids_tensor = torch.tensor([generated_ids], device=device)
-            ama_log_probs = self.get_log_probs(self.amateur_handler, ids_tensor)
+            ama_log_probs = self.get_log_probs(self.amateur_handler, ids_tensor, self.temperature)
             exp_device = next(self.expert_handler.model.parameters()).device
             ids_tensor_exp = torch.tensor([generated_ids], device=exp_device)
-            exp_log_probs = self.get_log_probs(self.expert_handler, ids_tensor_exp)
+            exp_log_probs = self.get_log_probs(self.expert_handler, ids_tensor_exp, self.temperature)
 
             # Get top-k candidate tokens from expert
             topk_indices = np.argpartition(exp_log_probs[0], -top_k)[-top_k:]

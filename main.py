@@ -32,9 +32,22 @@ def get_decoder(strategy, config):
         return GreedyDecoder(config)
     else:
         raise ValueError(f"Unknown strategy: {strategy}")
+    
+def update_config_temperature(config_path, mode):
+    config = load_config(config_path)
+    if mode == "focused":
+        config["default_params"]["temperature"] = 0.7
+    elif mode == "exploratory":
+        config["default_params"]["temperature"] = 1.5
+    with open(config_path, "w") as f:
+        yaml.dump(config, f)
+    return config
 
 def main():
-    config = load_config()
+    config_path = "config/config.yaml"
+    config = load_config(config_path)
+    mode = config.get("mode", "exploratory").lower()
+    config = update_config_temperature(config_path, mode)
     strategy = config.get("strategy", "auto")
     decoder = get_decoder(strategy, config)
     max_length = config.get("default_params", {}).get("max_length", 1000)
@@ -46,8 +59,6 @@ def main():
     else:
         llm_handler = LLM_Handler(config)
         llm_handler.standard_inference(prompt, max_length=max_length)
-
-    # print("\nModel Output:\n", output)
 
     clear_space()
 

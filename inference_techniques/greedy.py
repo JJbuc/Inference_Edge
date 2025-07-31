@@ -4,11 +4,13 @@ class GreedyDecoder(LLM_Handler):
     def generate(self, prompt, max_length=None, **override_params):
         if max_length is None:
             max_length = self.default_params.get("max_length", 1000)
+        temperature = self.default_params.get("temperature", 1.0)
         params = self.default_params.copy()
         params.update(override_params)
         outputs = self.pipe(
             prompt,
-            max_new_tokens=max_length
+            max_new_tokens=max_length,
+            temperature=temperature
         )
         generated_text = outputs[0]['generated_text']
         print(generated_text)
