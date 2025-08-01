@@ -1,4 +1,4 @@
-# Inference Edge
+# LLM DeployKit: The Modular Solution for Optimized LLM Inference & Serving.
 
 A modular framework for experimenting with decoding strategies for Large Language Models (LLMs), including greedy, beam search, top-k, top-p, and contrastive decoding.  
 Supports streaming output, easy configuration, and efficient resource management.
