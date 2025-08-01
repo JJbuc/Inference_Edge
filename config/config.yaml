@@ -1,6 +1,6 @@
 model_name: "Qwen/Qwen2.5-3B-Instruct"
-model_ama: "Qwen/Qwen2.5-Coder-0.5B-Instruct"
-model_exp: "Qwen/Qwen2.5-1.5B-Instruct"
+model_ama: "Qwen/Qwen2.5-Coder-0.5B-Instruct"  ## used for contrastive strategy, ignore otherwise
+model_exp: "Qwen/Qwen2.5-1.5B-Instruct" ## used for exploratory mode, ignore otherwise
 quantization: "4bit"
 device: "cuda"
 strategy: "top_k"  # Options: "auto", "greedy", "beam_search", "top_k", "top_p", "temperature", "contrastive"
