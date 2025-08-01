@@ -26,8 +26,8 @@ Edit `config/config.yaml` to set your models, decoding strategy, and parameters:
 
 ```yaml
 model_name: "Qwen/Qwen2.5-3B-Instruct"
-model_ama: "Qwen/Qwen2.5-Coder-0.5B-Instruct"
-model_exp: "Qwen/Qwen2.5-1.5B-Instruct"
+model_ama: "Qwen/Qwen2.5-Coder-0.5B-Instruct" # used for contrastive decoding, ignore otherwise
+model_exp: "Qwen/Qwen2.5-1.5B-Instruct" # used for contrastive decoding, ignore otherwise
 quantization: "4bit"
 device: "cuda"
 strategy: "contrastive"  # Options: auto, greedy, beam_search, top_k, top_p, contrastive
@@ -109,26 +109,90 @@ No need to manually delete models or pipelines.
 
 ---
 
-## Example Usage
+---
+
+## Running Inference
+
+### CLI Mode
+
+To run the framework in interactive command-line mode:
 
 ```bash
 python main.py
 ```
-```
-Enter your prompt: Why is the sky blue?
-```
-Output will be streamed or printed based on your config.
+
+You will be prompted to enter your input. The output will be streamed or printed based on your config settings.
 
 ---
 
+### FastAPI Server Mode
+
+You can also run Inference Edge as a FastAPI server for programmatic access:
+
+```bash
+python main.py serve
+```
+
+The API will be available at `http://localhost:8000`.
+
+#### Example API Request
+
+```bash
+curl -X POST "http://localhost:8000/infer" \
+     -H "Content-Type: application/json" \
+     -d '{"prompt": "Why is the sky blue?", "max_length": 100}'
+```
+
+**Response:**
+```json
+{
+  "output": "The sky appears blue because..."
+}
+```
+
+---
+
+## Using Docker
+
+You can run the project in a containerized environment.
+
+### Build the Docker image
+
+```bash
+docker build -t inference_edge .
+```
+
+### Run in CLI mode
+
+```bash
+docker run --rm -it inference_edge
+```
+
+### Run as FastAPI server
+
+```bash
+docker run --rm -it -p 8000:8000 inference_edge serve
+```
+
+---
+
+## Notes
+
+- **Configuration:** All decoding, model, and streaming options are set in `config/config.yaml`.
+- **Streaming:** Set `stream: true` in your config to print tokens as they are generated, or `false` to print the full output at once.
+- **Resource Management:** GPU/CPU memory is automatically freed after inference.
+- **Extending:** Add new decoding strategies in `inference_techniques/` and register them in `main.py
+
 ## Appendix A: Models Used for Benchmarking
 
-| Model Name    | Parameters | Notes                                                          |
-|---------------|------------|----------------------------------------------------------------|
-| Qwen2-0.5B    | 0.5B       | Smallest Qwen2 model, suitable for GPUs with limited memory   |
-| Qwen2-1.8B    | ~1.8B      | Mid-sized Qwen2 model, balancing performance and memory needs |
-| Phi 3 Mini    | ~3.8B      | A compact, capable open-source LLM                             |
-| Qwen2-7B      | 7B         | Large, full-sized 7 billion parameter open-source model       |
+## Appendix A: Models Used for Benchmarking
+
+| Model Name    | Parameters | Notes                                                          | Hugging Face Link                                                                 |
+|---------------|------------|----------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| Qwen2-0.5B    | 0.5B       | Smallest Qwen2 model, suitable for GPUs with limited memory    | [Qwen/Qwen2-0.5B](https://huggingface.co/Qwen/Qwen2-0.5B)                         |
+| Qwen2-1.8B    | ~1.8B      | Mid-sized Qwen2 model, balancing performance and memory needs  | [Qwen/Qwen2-1.8B](https://huggingface.co/Qwen/Qwen2-1.8B)                         |
+| Phi 3 Mini    | ~3.8B      | A compact, capable open-source LLM                             | [microsoft/phi-3-mini-4k-instruct](https://huggingface.co/microsoft/phi-3-mini-4k-instruct) |
+| Qwen2-7B      | 7B         | Large, full-sized 7 billion parameter open-source model        | [Qwen/Qwen2-7B](https://huggingface.co/Qwen/Qwen2-7B)                             |
 
 ## Appendix B: Performance Metrics Table for Inference_Edge on Different GPUs and Decoding Strategies
 
